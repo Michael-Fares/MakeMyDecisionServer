@@ -2,10 +2,18 @@ const mysql = require('mysql')
 const pool = require('../sql/connection')
 const { handleSQLError } = require('../sql/error')
 
-// get all users
+// get all users including decision count - working
 const getAllUsers = (req, res) => {
   // SELECT ALL USERS
-  pool.query(`SELECT * FROM Users`, (err, rows) => {
+  pool.query(`SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS NumberOfDecisions
+  FROM
+  Users
+  JOIN
+  Decisions
+  ON
+  Decisions.user_id = Users.user_id
+  GROUP BY
+  Users.user_id;`, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
   })
@@ -13,10 +21,8 @@ const getAllUsers = (req, res) => {
 
 const getUserById = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
-  let sql = 'SELECT ??, ??, ?? FROM ?? WHERE ?? = ?'
-  // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['id', 'first_name', 'last_name', 'users', 'id', req.params.id])
-
+  let sql = "SELECT * FROM Users WHERE user_id = ?"
+  sql = mysql.format(sql, [req.params.id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);

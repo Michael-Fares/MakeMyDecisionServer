@@ -3,19 +3,22 @@ require('dotenv').config()
 //
 const express = require("express");
 const bodyParser = require("body-parser");
-const usersRouter = require('./routers/users');
+
+const usersRouter = require('./routers/users.js');
 
 const app = express();
-const port = process.env.PORT || 4001;
+
 
 app.use(bodyParser.json())
 app.use(express.json())
 
-app.use('/', usersRouter)
+app.use('/users', usersRouter)
 
 app.get('/', (req, res) => {
   res.send('Welcome to Make My Decision Server!')
 })
+
+const port = process.env.PORT || 4001;
 
 app.listen(port, () => {
  console.log(`Web server is listening on port ${port}!`);
