@@ -2,33 +2,32 @@ const mysql = require('mysql')
 const pool = require('../sql/connection')
 const { handleSQLError } = require('../sql/error')
 
-// get all users including decision count - working
-const getAllUsers = (req, res) => {
-  // SELECT ALL USERS
-  pool.query(`SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS NumberOfDecisions
+// get all decisions including decision count - working
+const getAllDecisions = (req, res) => {
+ 
+  pool.query(`SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS NumberOfOptions, COUNT(DISTINCT Criteria.criterion_id) AS NumberOfCriteria, Decisions.user_id
   FROM
-  Users
-  JOIN
   Decisions
-  ON
-  Decisions.user_id = Users.user_id
+  JOIN
+  Options ON Decisions.decision_id = Options.decision_id
+  JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
   GROUP BY
-  Users.user_id;`, (err, rows) => {
+  Decisions.decision_id;`, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
   })
 }
 
 // get single user by id including decision count - working
-const getUserById = (req, res) => {
+const getDecisionById = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
-  let sql = `SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS NumberOfDecisions
+  let sql = `SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS NumberOfOptions, COUNT(DISTINCT Criteria.criterion_id) AS NumberOfCriteria, Decisions.user_id
   FROM
-  Users
-  JOIN
   Decisions
-  ON
-  Decisions.user_id = Users.user_id AND Users.user_id = ?`
+  JOIN
+  Options ON Decisions.decision_id = Options.decision_id
+  JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
+  WHERE Decisions.decision_id = ?;`
   sql = mysql.format(sql, [req.params.id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
@@ -36,7 +35,7 @@ const getUserById = (req, res) => {
   })
 }
 
-const createUser = (req, res) => {
+const createDecision = (req, res) => {
   // INSERT INTO USERS FIRST AND LAST NAME 
   let usersSql = `
   INSERT INTO users 
@@ -76,7 +75,7 @@ contactSql = mysql.format(contactSql,
   })
 }
 
-const updateUserById = (req, res) => {
+const updateDecisionById = (req, res) => {
   // UPDATE USERS AND SET FIRST AND LAST NAME WHERE ID = <REQ PARAMS ID>
   let sql = 'UPDATE ?? SET ?? = ?, ?? = ? WHERE id = ?'
   // WHAT GOES IN THE BRACKETS
@@ -88,7 +87,7 @@ const updateUserById = (req, res) => {
   })
 }
 
-const deleteUserByFirstName = (req, res) => {
+const deleteDecisionById = (req, res) => {
   // DELETE FROM USERS WHERE FIRST NAME = <REQ PARAMS FIRST_NAME>
   let sql = 'DELETE FROM ?? WHERE ?? = ?'
   // WHAT GOES IN THE BRACKETS
@@ -101,9 +100,9 @@ const deleteUserByFirstName = (req, res) => {
 }
 
 module.exports = {
-  getAllUsers,
-  getUserById,
-  createUser,
-  updateUserById,
-  deleteUserByFirstName
+  getAllDecisions,
+  getDecisionById,
+  createDecision,
+  updateDecisionById,
+  deleteDecisionById
 }
