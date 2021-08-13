@@ -1,3 +1,4 @@
+require('dotenv').config()
 const mysql = require('mysql')
 
 class Connection {
@@ -6,11 +7,10 @@ class Connection {
       console.log('creating connection...')
       this.pool = mysql.createPool({
         connectionLimit: 100,
-        host: '34.69.1.11',
-        user: 'root',
-        // need to use .env for password
-        password: '***********,
-        database: 'admin'
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DEFAULT_SCHEMA
       })
 
       return this.pool
@@ -23,3 +23,4 @@ class Connection {
 const instance = new Connection()
 
 module.exports = instance;
+

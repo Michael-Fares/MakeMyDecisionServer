@@ -2,9 +2,10 @@ const mysql = require('mysql')
 const pool = require('../sql/connection')
 const { handleSQLError } = require('../sql/error')
 
+// get all users
 const getAllUsers = (req, res) => {
   // SELECT ALL USERS
-  pool.query("SELECT * FROM users RIGHT JOIN usersContact ON usersContact.user_id = users.id RIGHT JOIN usersAddress ON usersAddress.user_id = users.id;", (err, rows) => {
+  pool.query(`SELECT * FROM Users`, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
   })
