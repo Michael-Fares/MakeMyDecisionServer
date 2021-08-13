@@ -8,7 +8,8 @@ class Connection {
         connectionLimit: 100,
         host: '34.69.1.11',
         user: 'root',
-        password: 'Batanjan8',
+        // need to use .env for password
+        password: '***********,
         database: 'admin'
       })
 
