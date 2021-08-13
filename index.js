@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 
 const usersRouter = require('./routers/users.js');
 const decisionsRouter = require('./routers/decisions.js');
+const criteriaRouter = require('./routers/criteria.js');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json())
 
 app.use('/users', usersRouter)
 app.use('/decisions', decisionsRouter)
+app.use('/criteria', criteriaRouter)
 
 app.get('/', (req, res) => {
   res.send('Welcome to Make My Decision Server!')
