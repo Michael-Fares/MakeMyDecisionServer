@@ -8,9 +8,9 @@ const getAllDecisions = (req, res) => {
   pool.query(`SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS NumberOfOptions, COUNT(DISTINCT Criteria.criterion_id) AS NumberOfCriteria, Decisions.user_id
   FROM
   Decisions
-  JOIN
+  LEFT JOIN
   Options ON Decisions.decision_id = Options.decision_id
-  JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
+  LEFT JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
   GROUP BY
   Decisions.decision_id;`, (err, rows) => {
     if (err) return handleSQLError(res, err)

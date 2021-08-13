@@ -8,7 +8,7 @@ const getAllUsers = (req, res) => {
   pool.query(`SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS NumberOfDecisions
   FROM
   Users
-  JOIN
+  LEFT JOIN
   Decisions
   ON
   Decisions.user_id = Users.user_id
