@@ -19,6 +19,23 @@ const getAllDecisions = (req, res) => {
   })
 }
 
+const getDecisionById = (req, res) => {
+ 
+  let sql = `SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS option_count, COUNT(DISTINCT Criteria.criterion_id) AS criteria_count 
+  FROM
+  Decisions
+  LEFT JOIN
+  Options ON Decisions.decision_id = Options.decision_id
+  LEFT JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
+  WHERE Decisions.decision_id = ?
+  GROUP BY Decisions.decision_id;`
+  sql = mysql.format(sql, [req.params.id])
+  pool.query(sql, (err, rows) => {
+    if (err) return handleSQLError(res, err)
+    return res.json(rows);
+  })
+}
+
 // list (get) all decisions for a user by their id - working
 const listDecisionsByUserId = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
@@ -73,6 +90,7 @@ const deleteDecisionById = (req, res) => {
 
 module.exports = {
   getAllDecisions,
+  getDecisionById,
   listDecisionsByUserId,
   createDecisionByUserId,
   updateDecisionById,
