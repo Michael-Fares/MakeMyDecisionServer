@@ -21,12 +21,11 @@ const getAllRankings = (req, res) => {
 
 // list (get) all rankings involved in a single decision by decision_id
 const listRankingsByDecisionId = (req, res) => {
-  // SELECT USERS WHERE ID = <REQ PARAMS ID>
   let sql = `SELECT Decisions.decision_text AS decision, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion, Rankings.option_rank_on_criterion
   FROM Decisions
-  JOIN Options ON Decisions.decision_id = Options.decision_id
-  JOIN Criteria ON Decisions.decision_id = Criteria.decision_id
-  JOIN Rankings
+  LEFT JOIN Options ON Decisions.decision_id = Options.decision_id
+  LEFT JOIN Criteria ON Decisions.decision_id = Criteria.decision_id
+  LEFT JOIN Rankings
   ON Rankings.option_id = Options.option_id AND Rankings.criterion_id = Criteria.criterion_id
   WHERE Decisions.decision_id = ?;`
   sql = mysql.format(sql, [req.params.id])
