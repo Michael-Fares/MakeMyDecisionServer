@@ -4,7 +4,7 @@ const router = express.Router()
 
 router.get('/', decisionsController.getAllDecisions)
 
-router.get('/:id', decisionsController.getDecisionById)
+router.get('/for-user/:id', decisionsController.listDecisionsByUserId)
 
 router.post('/', decisionsController.createDecision)
 

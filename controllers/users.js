@@ -5,7 +5,7 @@ const { handleSQLError } = require('../sql/error')
 // get all users including decision count - working
 const getAllUsers = (req, res) => {
   // SELECT ALL USERS
-  pool.query(`SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS NumberOfDecisions
+  pool.query(`SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS decision_count
   FROM
   Users
   LEFT JOIN
@@ -22,7 +22,7 @@ const getAllUsers = (req, res) => {
 // get single user by id including decision count - working
 const getUserById = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
-  let sql = `SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS NumberOfDecisions
+  let sql = `SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS decision_count
   FROM
   Users
   JOIN

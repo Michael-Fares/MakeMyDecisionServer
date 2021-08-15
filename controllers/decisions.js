@@ -5,7 +5,7 @@ const { handleSQLError } = require('../sql/error')
 // get all decisions including decision count - working
 const getAllDecisions = (req, res) => {
  
-  pool.query(`SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS NumberOfOptions, COUNT(DISTINCT Criteria.criterion_id) AS NumberOfCriteria, Decisions.user_id
+  pool.query(`SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS option_count, COUNT(DISTINCT Criteria.criterion_id) AS criteria_count, Decisions.user_id
   FROM
   Decisions
   LEFT JOIN
@@ -18,16 +18,17 @@ const getAllDecisions = (req, res) => {
   })
 }
 
-// get single user by id including decision count - working
-const getDecisionById = (req, res) => {
+// list (get) all decisions for a user by their id - working
+const listDecisionsByUserId = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
-  let sql = `SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS NumberOfOptions, COUNT(DISTINCT Criteria.criterion_id) AS NumberOfCriteria, Decisions.user_id
+  let sql = `SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS option_count, COUNT(DISTINCT Criteria.criterion_id) AS criteria_count 
   FROM
   Decisions
-  JOIN
+  LEFT JOIN
   Options ON Decisions.decision_id = Options.decision_id
-  JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
-  WHERE Decisions.decision_id = ?;`
+  LEFT JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
+  WHERE Decisions.user_id = ?
+  GROUP BY Decisions.decision_id;`
   sql = mysql.format(sql, [req.params.id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
@@ -101,7 +102,7 @@ const deleteDecisionById = (req, res) => {
 
 module.exports = {
   getAllDecisions,
-  getDecisionById,
+  listDecisionsByUserId,
   createDecision,
   updateDecisionById,
   deleteDecisionById

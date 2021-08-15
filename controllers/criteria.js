@@ -2,10 +2,10 @@ const mysql = require('mysql')
 const pool = require('../sql/connection')
 const { handleSQLError } = require('../sql/error')
 
-// get all decisions including decision count - working
+// get all criteria including decision text
 const getAllCriteria = (req, res) => {
  
-  pool.query(`SELECT Criteria.*, Decisions.decision_text AS Decision
+  pool.query(`SELECT Criteria.*, Decisions.decision_text AS decision
   FROM Criteria
   JOIN Decisions
   ON Criteria.decision_id = Decisions.decision_id;`, (err, rows) => {
@@ -14,14 +14,14 @@ const getAllCriteria = (req, res) => {
   })
 }
 
-// get single user by id including decision count - working
-const getCriterionById = (req, res) => {
+// list (get) all criteria by decision id
+const listCriteriaByDecisionId = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
-  let sql = `SELECT Criteria.*, Decisions.decision_text AS Decision
+  let sql = `SELECT Criteria.criterion_id, Criteria.criterion_text, Criteria.criterion_importance, Decisions.decision_text AS decision
   FROM Criteria
   JOIN Decisions
   ON Criteria.decision_id = Decisions.decision_id
-  AND Criteria.criterion_id = ?;`
+  AND Decisions.decision_id = ?;`
   sql = mysql.format(sql, [req.params.id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
@@ -95,7 +95,7 @@ const deleteCriterionById = (req, res) => {
 
 module.exports = {
   getAllCriteria,
-  getCriterionById,
+  listCriteriaByDecisionId,
   createCriterion,
   updateCriterionById,
   deleteCriterionById

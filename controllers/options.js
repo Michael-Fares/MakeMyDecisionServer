@@ -5,7 +5,7 @@ const { handleSQLError } = require('../sql/error')
 // get all options including associated decision text
 const getAllOptions = (req, res) => {
  
-  pool.query(`SELECT Options.*, Decisions.decision_text AS Decision
+  pool.query(`SELECT Options.*, Decisions.decision_text AS decision
   FROM Options
   JOIN Decisions
   ON Options.decision_id = Decisions.decision_id;`, (err, rows) => {
@@ -14,13 +14,13 @@ const getAllOptions = (req, res) => {
   })
 }
 
-// get single user by id including decision count - working
-const getOptionById = (req, res) => {
+// list (get) all options for a decision by decision_id
+const listOptionsByDecisionId = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
-  let sql = `SELECT Options.*, Decisions.decision_text AS Decision
+  let sql = `SELECT Options.option_id, Options.option_text, Decisions.decision_text AS decision
   FROM Options
   JOIN Decisions
-  ON Options.decision_id = Decisions.decision_id AND Options.option_id = ?`
+  ON Options.decision_id = Decisions.decision_id AND Decisions.decision_id = ?`
   sql = mysql.format(sql, [req.params.id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
@@ -94,7 +94,7 @@ const deleteOptionById = (req, res) => {
 
 module.exports = {
   getAllOptions,
-  getOptionById,
+  listOptionsByDecisionId,
   createOption,
   updateOptionById,
   deleteOptionById
