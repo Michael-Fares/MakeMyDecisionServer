@@ -6,10 +6,10 @@ router.get('/', rankingsController.getAllRankings)
 
 router.get('/for-decision/:id', rankingsController.listRankingsByDecisionId)
 
-router.post('/', rankingsController.createRanking)
+router.post('/for-option/:option_id/on-criterion/:criterion_id', rankingsController.createRanking)
 
-router.put('/:id', rankingsController.updateRankingById)
+router.put('/for-option/:option_id/on-criterion/:criterion_id', rankingsController.updateRankingById)
 
-router.delete('/:first_name', rankingsController.deleteRankingById)
+router.delete('/for-option/:option_id/on-criterion/:criterion_id', rankingsController.deleteRankingById)
 
 module.exports = router
