@@ -19,10 +19,10 @@ const getAllRankings = (req, res) => {
   })
 }
 
-// get single user by id including decision count - working
-const getRankingsByDecisionId = (req, res) => {
+// list (get) all rankings involved in a single decision by decision_id
+const listRankingsByDecisionId = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
-  let sql = `SELECT Decisions.decision_id, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion, Rankings.option_rank_on_criterion
+  let sql = `SELECT Decisions.decision_text AS decision, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion, Rankings.option_rank_on_criterion
   FROM Decisions
   JOIN Options ON Decisions.decision_id = Options.decision_id
   JOIN Criteria ON Decisions.decision_id = Criteria.decision_id
@@ -102,7 +102,7 @@ const deleteRankingById = (req, res) => {
 
 module.exports = {
   getAllRankings,
-  getRankingsByDecisionId,
+  listRankingsByDecisionId,
   createRanking,
   updateRankingById,
   deleteRankingById
