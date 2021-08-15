@@ -6,7 +6,7 @@ router.get('/', optionsController.getAllOptions)
 
 router.get('/for-decision/:id', optionsController.listOptionsByDecisionId)
 
-router.post('/', optionsController.createOption)
+router.post('/for-decision/:id', optionsController.createOptionByDecisionId)
 
 router.put('/:id', optionsController.updateOptionById)
 

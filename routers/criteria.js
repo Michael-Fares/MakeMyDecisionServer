@@ -6,7 +6,7 @@ router.get('/', criteriaController.getAllCriteria)
 
 router.get('/for-decision/:id', criteriaController.listCriteriaByDecisionId)
 
-router.post('/', criteriaController.createCriterion)
+router.post('/for-decision/:id', criteriaController.createCriterionByDecisionId)
 
 router.put('/:id', criteriaController.updateCriterionById)
 

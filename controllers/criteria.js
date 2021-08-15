@@ -29,44 +29,13 @@ const listCriteriaByDecisionId = (req, res) => {
   })
 }
 
-const createCriterion = (req, res) => {
-  // INSERT INTO USERS FIRST AND LAST NAME 
-  let usersSql = `
-  INSERT INTO users 
-  SET first_name = ?, last_name = ?; `
-
-  let addressSql =`INSERT INTO usersAddress 
-  SET user_id = ?, address = ?, city = ?, county = ?, state=?, zip = ?;`
-  
-  let contactSql = `INSERT INTO 
-  usersContact 
-  SET user_id = ?, phone1 = ?, phone2 = ?, email = ?; 
-  `
-
-  // WHAT GOES IN THE BRACKETS
-usersSql = mysql.format(usersSql, 
-    [req.body.first_name, req.body.last_name])
-
-addressSql = mysql.format( addressSql, 
-    [req.body.user_id, req.body.address, req.body.city, req.body.county, req.body.state, req.body.zip,
-    ]);
-
-contactSql = mysql.format(contactSql, 
-    [req.body.user_id, req.body.phone1, req.body.phone2, req.body.email])
-
-
-
-// your "nested pool query method worked!!! what a life saver!"
-
-  pool.query(usersSql, (err, results) => {
-    pool.query(addressSql, (err, results) => {
-      pool.query(contactSql, (err, results) => {
-        if (err) return handleSQLError(res, err)
-        return res.json({ newId: results.insertId, 
-                          ...req.body});
-      })
-    })  
-  })
+const createCriterionByDecisionId = (req, res) => {
+ let sql = `INSERT INTO Criteria (decision_id, criterion_text, criterion_importance) VALUES (?,?,?);`
+ sql = mysql.format(sql, [req.params.id, req.body.criterion_text, req.body.criterion_importance])
+ pool.query(sql, (err, rows) => {
+   if (err) return handleSQLError(res, err)
+   return res.json(rows);
+ })
 }
 
 const updateCriterionById = (req, res) => {
@@ -96,7 +65,7 @@ const deleteCriterionById = (req, res) => {
 module.exports = {
   getAllCriteria,
   listCriteriaByDecisionId,
-  createCriterion,
+  createCriterionByDecisionId,
   updateCriterionById,
   deleteCriterionById
 }

@@ -6,7 +6,7 @@ router.get('/', decisionsController.getAllDecisions)
 
 router.get('/for-user/:id', decisionsController.listDecisionsByUserId)
 
-router.post('/', decisionsController.createDecision)
+router.post('/for-user/:id', decisionsController.createDecisionByUserId)
 
 router.put('/:id', decisionsController.updateDecisionById)
 
