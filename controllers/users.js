@@ -25,11 +25,14 @@ const getUserById = (req, res) => {
   let sql = `SELECT Users.user_id, Users.first_name, Users.last_name, Users.email, COUNT(Decisions.decision_id) AS decision_count
   FROM
   Users
-  JOIN
+  LEFT JOIN
   Decisions
   ON
-  Decisions.user_id = Users.user_id AND Users.user_id = ?`
-  sql = mysql.format(sql, [req.params.id])
+  Decisions.user_id = Users.user_id 
+  WHERE Users.user_id = ? AND Users.user_id IS NOT NULL
+  GROUP BY
+  Users.user_id`
+  sql = mysql.format(sql, [req.params.user_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
@@ -53,7 +56,7 @@ const updateUserById = (req, res) => {
   const { first_name, last_name, email } = req.body
   let sql = 'UPDATE Users SET first_name = ?, last_name = ?, email = ? WHERE Users.user_id = ?'
   // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, [first_name, last_name, email, req.params.id])
+  sql = mysql.format(sql, [first_name, last_name, email, req.params.user_id])
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)
@@ -63,14 +66,14 @@ const updateUserById = (req, res) => {
 
 // delete user by id
 const deleteUserById = (req, res) => {
-  // DELETE FROM USERS WHERE FIRST NAME = <REQ PARAMS FIRST_NAME>
+  // DELETE FROM USERS WHERE FIRST NAME = <REQ PARAMS user_id>
   let sql = 'DELETE FROM ?? WHERE ?? = ?'
   // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['Users', 'Users.user_id', req.params.id])
+  sql = mysql.format(sql, ['Users', 'Users.user_id', req.params.user_id])
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)
-    return res.json({ message: `Deleted ${results.affectedRows} user(s)` });
+    return res.json({ message: `Deleted ${results.affectedRows} user(s) with id ${req.params.user_id}` });
   })
 }
 

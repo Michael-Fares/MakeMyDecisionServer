@@ -83,14 +83,14 @@ const updateCriterionById = (req, res) => {
 }
 
 const deleteCriterionById = (req, res) => {
-  // DELETE FROM USERS WHERE FIRST NAME = <REQ PARAMS FIRST_NAME>
+
   let sql = 'DELETE FROM ?? WHERE ?? = ?'
   // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['users', 'first_name', req.params.first_name])
+  sql = mysql.format(sql, ['Criteria', 'Criteria.criterion_id', req.params.criterion_id])
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)
-    return res.json({ message: `Deleted ${results.affectedRows} user(s)` });
+    return res.json({ message: `Deleted ${results.affectedRows} criterion with id ${req.params.criterion_id}` });
   })
 }
 

@@ -77,15 +77,15 @@ const updateDecisionById = (req, res) => {
 }
 
 const deleteDecisionById = (req, res) => {
-  // DELETE FROM USERS WHERE FIRST NAME = <REQ PARAMS FIRST_NAME>
-  let sql = 'DELETE FROM ?? WHERE ?? = ?'
-  // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['users', 'first_name', req.params.first_name])
+ // DELETE FROM USERS WHERE FIRST NAME = <REQ PARAMS user_id>
+ let sql = 'DELETE FROM ?? WHERE ?? = ?'
+ // WHAT GOES IN THE BRACKETS
+ sql = mysql.format(sql, ['Decisions', 'Decisions.decision_id', req.params.decision_id])
 
-  pool.query(sql, (err, results) => {
-    if (err) return handleSQLError(res, err)
-    return res.json({ message: `Deleted ${results.affectedRows} user(s)` });
-  })
+ pool.query(sql, (err, results) => {
+   if (err) return handleSQLError(res, err)
+   return res.json({ message: `Deleted ${results.affectedRows} decision(s) with id ${req.params.decision_id}` });
+ })
 }
 
 module.exports = {
