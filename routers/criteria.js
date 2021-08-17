@@ -4,14 +4,14 @@ const router = express.Router()
 
 router.get('/', criteriaController.getAllCriteria)
 
-// router.get('/:criterion_id', criteriaController.getCriterionById)
+router.get('/:criterion_id', criteriaController.getCriterionById)
 
-router.get('/for-decision/:id', criteriaController.listCriteriaByDecisionId)
+router.get('/for-decision/:decision_id', criteriaController.listCriteriaByDecisionId)
 
-router.post('/for-decision/:id', criteriaController.createCriterionByDecisionId)
+router.post('/for-decision/:decision_id', criteriaController.createCriterionByDecisionId)
 
-router.put('/:id', criteriaController.updateCriterionById)
+router.put('/:criterion_id', criteriaController.updateCriterionById)
 
-router.delete('/:first_name', criteriaController.deleteCriterionById)
+router.delete('/:criterion_id', criteriaController.deleteCriterionById)
 
 module.exports = router

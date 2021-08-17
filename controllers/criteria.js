@@ -14,15 +14,27 @@ const getAllCriteria = (req, res) => {
   })
 }
 
+const getCriterionById = (req, res) => {
+   let sql = `SELECT Criteria.criterion_id, Criteria.criterion_text, Criteria.criterion_importance, Decisions.decision_text AS decision
+   FROM Criteria
+   JOIN Decisions
+   ON Criteria.decision_id = Decisions.decision_id
+   AND Criteria.criterion_id = ?;`
+   sql = mysql.format(sql, [req.params.criterion_id])
+   pool.query(sql, (err, rows) => {
+     if (err) return handleSQLError(res, err)
+     return res.json(rows);
+   })
+}
+
 // list (get) all criteria by decision id
 const listCriteriaByDecisionId = (req, res) => {
-  // SELECT USERS WHERE ID = <REQ PARAMS ID>
   let sql = `SELECT Criteria.criterion_id, Criteria.criterion_text, Criteria.criterion_importance, Decisions.decision_text AS decision
   FROM Criteria
   JOIN Decisions
   ON Criteria.decision_id = Decisions.decision_id
   AND Decisions.decision_id = ?;`
-  sql = mysql.format(sql, [req.params.id])
+  sql = mysql.format(sql, [req.params.decision_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
@@ -33,7 +45,7 @@ const createCriterionByDecisionId = (req, res) => {
   
 
  let sql = `INSERT INTO Criteria (decision_id, criterion_text, criterion_importance) VALUES (?,?,?);`
- sql = mysql.format(sql, [req.params.id, req.body.criterion_text, req.body.criterion_importance])
+ sql = mysql.format(sql, [req.params.decision_id, req.body.criterion_text, req.body.criterion_importance])
  pool.query(sql, (err, rows) => {
    if (err) return handleSQLError(res, err)
    return res.json(rows);
@@ -85,6 +97,7 @@ const deleteCriterionById = (req, res) => {
 
 module.exports = {
   getAllCriteria,
+  getCriterionById,
   listCriteriaByDecisionId,
   createCriterionByDecisionId,
   updateCriterionById,
