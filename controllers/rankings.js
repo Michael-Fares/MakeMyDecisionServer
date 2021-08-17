@@ -19,15 +19,16 @@ const getAllRankings = (req, res) => {
   })
 }
 
+// Working
 const getRankingById = (req, res) => {
-  let sql = `SELECT Decisions.decision_id, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion, Rankings.option_rank_on_criterion
+  let sql = `SELECT Decisions.decision_text AS decision, Decisions.decision_id, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion, Rankings.option_rank_on_criterion
   FROM Decisions
-  JOIN Options ON Decisions.decision_id = Options.decision_id
-  JOIN Criteria ON Decisions.decision_id = Criteria.decision_id
-  JOIN Rankings
-  ON Options.option_id = ? AND Criteria.criterion_id = ?;`
+  LEFT JOIN Options ON Decisions.decision_id = Options.decision_id
+  LEFT JOIN Criteria ON Decisions.decision_id = Criteria.decision_id
+  LEFT JOIN Rankings
+  ON Rankings.option_id = Options.option_id AND Rankings.criterion_id = Criteria.criterion_id
+  WHERE Options.option_id = ? AND Criteria.criterion_id = ?`
   sql = mysql.format(sql, [req.params.option_id, req.params.criterion_id])
-  console.log('QUERY', sql)
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
@@ -60,10 +61,8 @@ const createRanking = (req, res) => {
 }
 
 const updateRankingById = (req, res) => {
-  // UPDATE USERS AND SET FIRST AND LAST NAME WHERE ID = <REQ PARAMS ID>
-  let sql = 'UPDATE ?? SET ?? = ?, ?? = ? WHERE id = ?'
-  // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['users', 'first_name', req.body.first_name, 'last_name', req.body.last_name, req.params.id])
+  let sql = `UPDATE Rankings SET option_rank_on_criterion = ? WHERE Rankings.option_id = ? AND Rankings.criterion_id =?;`
+  sql = mysql.format(sql, [req.body.option_rank_on_criterion, req.params.option_id, req.params.criterion_id])
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)
