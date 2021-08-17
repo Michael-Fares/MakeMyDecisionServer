@@ -51,24 +51,6 @@ const createCriterionByDecisionId = (req, res) => {
    return res.json(rows);
  })
 
-
- // // use results.insertId property to take the newly generated criterion id, and immediately insert it into the rankings table as a foreign key - is there a way to do this for criteria and also the same for options or am I overthiking it?
- // let criteriaSql = `INSERT INTO Criteria (decision_id, criterion_text, criterion_importance) VALUES (?,?,?);`
-
-  // criteriaSql = mysql.format(criteriaSql, [req.params.id, req.body.criterion_text, req.body.criterion_importance])
-
-  // let rankingsSql = `INSERT INTO Rankings (criterion_id) VALUES (SELECT LAST_INSERT_ID())`
-  
-  
-  // // rankingsSql = mysql.format(rankingsSql, LAST_INSERT_ID())
-
-  // pool.query(criteriaSql, (err, results) => {
-  //   pool.query(rankingsSql, (err, results) => {
-  //     if (err) return handleSQLError(res, err)
-  //     return res.json(rows)
-  //   })
-  // })
-
 }
 
 const updateCriterionById = (req, res) => {
