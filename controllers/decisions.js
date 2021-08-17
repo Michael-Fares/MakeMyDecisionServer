@@ -29,7 +29,7 @@ const getDecisionById = (req, res) => {
   LEFT JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
   WHERE Decisions.decision_id = ?
   GROUP BY Decisions.decision_id;`
-  sql = mysql.format(sql, [req.params.id])
+  sql = mysql.format(sql, [req.params.decision_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
@@ -47,7 +47,7 @@ const listDecisionsByUserId = (req, res) => {
   LEFT JOIN Criteria ON Criteria.decision_id = Decisions.decision_id
   WHERE Decisions.user_id = ?
   GROUP BY Decisions.decision_id;`
-  sql = mysql.format(sql, [req.params.id])
+  sql = mysql.format(sql, [req.params.user_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
@@ -57,7 +57,7 @@ const listDecisionsByUserId = (req, res) => {
 const createDecisionByUserId = (req, res) => {
   let sql = `INSERT INTO Decisions (user_id, decision_text) VALUES 
   (?, ?);`
-  sql = mysql.format(sql, [req.params.id, req.body.decision_text])
+  sql = mysql.format(sql, [req.params.user_id, req.body.decision_text])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);

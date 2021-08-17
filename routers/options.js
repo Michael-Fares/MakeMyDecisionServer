@@ -4,6 +4,8 @@ const router = express.Router()
 
 router.get('/', optionsController.getAllOptions)
 
+// router.get('/:option_id', criteriaController.getOptionById)
+
 router.get('/for-decision/:id', optionsController.listOptionsByDecisionId)
 
 router.post('/for-decision/:id', optionsController.createOptionByDecisionId)
