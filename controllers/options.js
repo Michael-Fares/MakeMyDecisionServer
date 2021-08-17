@@ -51,10 +51,8 @@ const createOptionByDecisionId = (req, res) => {
  }
 
 const updateOptionById = (req, res) => {
-  // UPDATE USERS AND SET FIRST AND LAST NAME WHERE ID = <REQ PARAMS ID>
-  let sql = 'UPDATE ?? SET ?? = ?, ?? = ? WHERE id = ?'
-  // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['users', 'first_name', req.body.first_name, 'last_name', req.body.last_name, req.params.id])
+  let sql = 'UPDATE Options SET Options.option_text = ? WHERE Options.option_id = ?'
+  sql = mysql.format(sql, [req.body.option_text, req.params.option_id])
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)

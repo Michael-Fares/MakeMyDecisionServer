@@ -66,9 +66,9 @@ const createDecisionByUserId = (req, res) => {
 
 const updateDecisionById = (req, res) => {
   // UPDATE USERS AND SET FIRST AND LAST NAME WHERE ID = <REQ PARAMS ID>
-  let sql = 'UPDATE ?? SET ?? = ?, ?? = ? WHERE id = ?'
+  let sql = 'UPDATE Decisions SET Decision_text = ? WHERE Decisions.decision_id = ?'
   // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['users', 'first_name', req.body.first_name, 'last_name', req.body.last_name, req.params.id])
+  sql = mysql.format(sql, [req.body.decision_text, req.params.decision_id])
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)

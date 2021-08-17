@@ -72,10 +72,9 @@ const createCriterionByDecisionId = (req, res) => {
 }
 
 const updateCriterionById = (req, res) => {
-  // UPDATE USERS AND SET FIRST AND LAST NAME WHERE ID = <REQ PARAMS ID>
-  let sql = 'UPDATE ?? SET ?? = ?, ?? = ? WHERE id = ?'
-  // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['users', 'first_name', req.body.first_name, 'last_name', req.body.last_name, req.params.id])
+
+  let sql = 'UPDATE Criteria SET Criteria.criterion_text = ?, Criteria.criterion_importance = ? WHERE Criteria.criterion_id = ?'
+  sql = mysql.format(sql, [req.body.criterion_text, req.body.criterion_importance, req.params.criterion_id])
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)

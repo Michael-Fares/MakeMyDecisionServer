@@ -19,7 +19,7 @@ const getAllRankings = (req, res) => {
   })
 }
 
-// Working
+// get ranking by id (composite primary key of option_id, criterion_id)
 const getRankingById = (req, res) => {
   let sql = `SELECT Decisions.decision_text AS decision, Decisions.decision_id, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion, Rankings.option_rank_on_criterion
   FROM Decisions
