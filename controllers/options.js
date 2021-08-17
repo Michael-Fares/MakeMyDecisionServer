@@ -14,6 +14,19 @@ const getAllOptions = (req, res) => {
   })
 }
 
+const getOptionById = (req, res) => {
+  // SELECT USERS WHERE ID = <REQ PARAMS ID>
+  let sql = `SELECT Decisions.decision_id, Options.option_text, Decisions.decision_text AS decision
+  FROM Options
+  JOIN Decisions
+  ON Options.decision_id = Decisions.decision_id AND Options.option_id = ?`
+  sql = mysql.format(sql, [req.params.option_id])
+  pool.query(sql, (err, rows) => {
+    if (err) return handleSQLError(res, err)
+    return res.json(rows);
+  })
+}
+
 // list (get) all options for a decision by decision_id
 const listOptionsByDecisionId = (req, res) => {
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
@@ -21,7 +34,7 @@ const listOptionsByDecisionId = (req, res) => {
   FROM Options
   JOIN Decisions
   ON Options.decision_id = Decisions.decision_id AND Decisions.decision_id = ?`
-  sql = mysql.format(sql, [req.params.id])
+  sql = mysql.format(sql, [req.params.decision_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
@@ -30,7 +43,7 @@ const listOptionsByDecisionId = (req, res) => {
 
 const createOptionByDecisionId = (req, res) => {
   let sql = `INSERT INTO Options (decision_id, option_text) VALUES (?,?);`
-  sql = mysql.format(sql, [req.params.id, req.body.option_text])
+  sql = mysql.format(sql, [req.params.decision_id, req.body.option_text])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
@@ -63,6 +76,7 @@ const deleteOptionById = (req, res) => {
 
 module.exports = {
   getAllOptions,
+  getOptionById,
   listOptionsByDecisionId,
   createOptionByDecisionId,
   updateOptionById,

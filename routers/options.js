@@ -4,14 +4,14 @@ const router = express.Router()
 
 router.get('/', optionsController.getAllOptions)
 
-// router.get('/:option_id', criteriaController.getOptionById)
+router.get('/:option_id', optionsController.getOptionById)
 
-router.get('/for-decision/:id', optionsController.listOptionsByDecisionId)
+router.get('/for-decision/:decision_id', optionsController.listOptionsByDecisionId)
 
-router.post('/for-decision/:id', optionsController.createOptionByDecisionId)
+router.post('/for-decision/:decision_id', optionsController.createOptionByDecisionId)
 
-router.put('/:id', optionsController.updateOptionById)
+router.put('/:option_id', optionsController.updateOptionById)
 
-router.delete('/:first_name', optionsController.deleteOptionById)
+router.delete('/:option_id', optionsController.deleteOptionById)
 
 module.exports = router

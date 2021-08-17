@@ -15,7 +15,7 @@ const getAllCriteria = (req, res) => {
 }
 
 const getCriterionById = (req, res) => {
-   let sql = `SELECT Criteria.criterion_id, Criteria.criterion_text, Criteria.criterion_importance, Decisions.decision_text AS decision
+   let sql = `SELECT Decisions.decision_id, Criteria.criterion_text, Criteria.criterion_importance, Decisions.decision_text AS decision
    FROM Criteria
    JOIN Decisions
    ON Criteria.decision_id = Decisions.decision_id

@@ -21,7 +21,7 @@ const getAllDecisions = (req, res) => {
 
 const getDecisionById = (req, res) => {
  
-  let sql = `SELECT Decisions.decision_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS option_count, COUNT(DISTINCT Criteria.criterion_id) AS criteria_count 
+  let sql = `SELECT Decisions.user_id, Decisions.decision_text, COUNT(DISTINCT Options.option_id) AS option_count, COUNT(DISTINCT Criteria.criterion_id) AS criteria_count 
   FROM
   Decisions
   LEFT JOIN
