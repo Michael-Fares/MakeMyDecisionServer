@@ -5,15 +5,30 @@ const { handleSQLError } = require('../sql/error')
 // get all options including associated decision text
 const getAllRankings = (req, res) => {
  
-  pool.query(`SELECT Decisions.decision_id, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion,Rankings.option_rank_on_criterion
+  pool.query(`SELECT Decisions.decision_id, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion, Rankings.option_rank_on_criterion
   FROM Decisions
-  JOIN Options ON Decisions.decision_id = Options.decision_id
-  JOIN Criteria ON Decisions.decision_id = Criteria.decision_id
-  JOIN Rankings
+  LEFT JOIN Options ON Decisions.decision_id = Options.decision_id
+  LEFT JOIN Criteria ON Decisions.decision_id = Criteria.decision_id
+  LEFT JOIN Rankings
   ON Rankings.option_id = Options.option_id AND Rankings.criterion_id = Criteria.criterion_id
   ORDER BY
   Decisions.decision_id;
   `, (err, rows) => {
+    if (err) return handleSQLError(res, err)
+    return res.json(rows);
+  })
+}
+
+const getRankingById = (req, res) => {
+  let sql = `SELECT Decisions.decision_id, Options.option_id, Criteria.criterion_id, Options.option_text AS "option", Criteria.criterion_text AS criterion, Rankings.option_rank_on_criterion
+  FROM Decisions
+  JOIN Options ON Decisions.decision_id = Options.decision_id
+  JOIN Criteria ON Decisions.decision_id = Criteria.decision_id
+  JOIN Rankings
+  ON Options.option_id = ? AND Criteria.criterion_id = ?;`
+  sql = mysql.format(sql, [req.params.option_id, req.params.criterion_id])
+  console.log('QUERY', sql)
+  pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
   })
@@ -28,7 +43,7 @@ const listRankingsByDecisionId = (req, res) => {
   LEFT JOIN Rankings
   ON Rankings.option_id = Options.option_id AND Rankings.criterion_id = Criteria.criterion_id
   WHERE Decisions.decision_id = ?;`
-  sql = mysql.format(sql, [req.params.id])
+  sql = mysql.format(sql, [req.params.decision_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
@@ -70,6 +85,7 @@ const deleteRankingById = (req, res) => {
 
 module.exports = {
   getAllRankings,
+  getRankingById,
   listRankingsByDecisionId,
   createRanking,
   updateRankingById,

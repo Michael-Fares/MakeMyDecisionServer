@@ -4,7 +4,9 @@ const router = express.Router()
 
 router.get('/', rankingsController.getAllRankings)
 
-router.get('/for-decision/:id', rankingsController.listRankingsByDecisionId)
+router.put('/for-option/:option_id/on-criterion/:criterion_id', rankingsController.getRankingById)
+
+router.get('/for-decision/:decision_id', rankingsController.listRankingsByDecisionId)
 
 router.post('/for-option/:option_id/on-criterion/:criterion_id', rankingsController.createRanking)
 
