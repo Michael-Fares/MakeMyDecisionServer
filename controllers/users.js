@@ -35,6 +35,9 @@ const getUserById = (req, res) => {
   sql = mysql.format(sql, [req.params.user_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
+    if(rows.length === 0) {
+      res.status(404)
+    }
     return res.json(rows);
   })
 }
