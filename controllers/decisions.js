@@ -67,9 +67,12 @@ const createDecisionByUserId = (req, res) => {
     if (err) {
       return handleSQLError(res, err)
     }
-    if (rows.user_id !== req.id) {
-      res.status(400).send('Please log in')
-    }
+
+// is the following if statement even needed??
+    // if (rows.user_id !== req.id) {
+    //   res.status(400).send('Please log in')
+    // }
+
     return res.json(rows);
   })
 }

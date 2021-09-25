@@ -19,10 +19,10 @@ const checkJwt = (req, res, next) => {
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if(err){
       console.log("Did not verify jwt" + err);
-      return res.status(401).send("Unauthorized!")
+      return res.status(401).send("Unauthorized request, please log in first")
     }
 
-    console.log(decoded);
+    console.log("decoded information about who made the request", decoded);
     //req - had info about the post that you were to create
     //by decoding the token we know who made the request
     req.email = decoded.email;
