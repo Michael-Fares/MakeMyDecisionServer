@@ -25,10 +25,10 @@ const checkJwt = (req, res, next) => {
     console.log(decoded);
     //req - had info about the post that you were to create
     //by decoding the token we know who made the request
-    req.userName = decoded.userName;
+    req.email = decoded.email;
     req.id = decoded.id
     next()
   })
 }
 
-module.exports = {checkJwt}
+module.exports = { checkJwt }

@@ -53,13 +53,23 @@ const listDecisionsByUserId = (req, res) => {
     return res.json(rows);
   })
 }
-/***** POST */
+
 const createDecisionByUserId = (req, res) => {
+  
+
+  console.log("value of req.id", req.id)
+  
   let sql = `INSERT INTO Decisions (user_id, decision_text) VALUES 
   (?, ?);`
-  sql = mysql.format(sql, [req.params.user_id, req.body.decision_text])
+  sql = mysql.format(sql, [req.id, req.body.decision_text])
+
   pool.query(sql, (err, rows) => {
-    if (err) return handleSQLError(res, err)
+    if (err) {
+      return handleSQLError(res, err)
+    }
+    if (rows.user_id !== req.id) {
+      res.status(400).send('Please log in')
+    }
     return res.json(rows);
   })
 }
