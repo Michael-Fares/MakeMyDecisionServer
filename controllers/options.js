@@ -24,7 +24,7 @@ const getOptionById = (req, res) => {
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     if(!rows.length) {
-      res.status(404).send("No option found with that id")
+      return res.status(404).send("No option found with that id")
     }
     return res.json(rows);
   })
@@ -41,7 +41,7 @@ const listOptionsByDecisionId = (req, res) => {
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     if(!rows.length) {
-      res.status(404).send("No decision exists with that id")
+      return res.status(404).send("No decision exists with that id")
     }
     return res.json(rows);
   })

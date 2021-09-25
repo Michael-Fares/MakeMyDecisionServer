@@ -35,7 +35,7 @@ const getDecisionById = (req, res) => {
       return handleSQLError(res, err) 
     }
     if(!rows.length) {
-      return res.status(404).send('No decision found with that id')
+      return res.status(404).send("no decision exists with that id")
     }
     return res.json(rows);
   })
@@ -56,7 +56,7 @@ const listDecisionsByUserId = (req, res) => {
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
     if (!rows.length) {
-      res.status(404).send("no user with that id exists")
+      return res.status(404).send("no user with that id exists")
     }
     return res.json(rows);
   })

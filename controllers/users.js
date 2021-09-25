@@ -40,7 +40,7 @@ const getUserById = (req, res) => {
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)
     if(results.length === 0) {
-      res.status(404).send('No user found with that id')
+      return res.status(404).send('No user found with that id')
     }
     return res.json(results);
   })
@@ -103,7 +103,7 @@ const loginUser = (req, res) => {
       const accessToken = jwt.sign(unsignedToken, jwtSecret) //string
       res.json( { accessToken, email, id} );
     } else{
-      res.status(401).send("Email and/or Password are incorrect")
+      return res.status(401).send("Email and/or Password are incorrect")
     }
 
   })
