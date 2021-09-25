@@ -23,6 +23,9 @@ const getCriterionById = (req, res) => {
    sql = mysql.format(sql, [req.params.criterion_id])
    pool.query(sql, (err, rows) => {
      if (err) return handleSQLError(res, err)
+     if(!rows.length) {
+       res.status(404).send("No criterion found with that id")
+     }
      return res.json(rows);
    })
 }
@@ -37,6 +40,9 @@ const listCriteriaByDecisionId = (req, res) => {
   sql = mysql.format(sql, [req.params.decision_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
+    if(!rows.length) {
+      res.status(404).send("No decision exists with that id")
+    }
     return res.json(rows);
   })
 }

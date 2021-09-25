@@ -2,6 +2,9 @@ const express = require('express')
 const usersController = require('../controllers/users.js')
 const router = express.Router()
 
+const auth = require("../middleware/authentication")
+
+
 router.get('/', usersController.getAllUsers)
 
 router.get('/:user_id', usersController.getUserById)
@@ -15,6 +18,6 @@ router.post('/login', usersController.loginUser)
 
 router.put('/:user_id', usersController.updateUserById)
 
-router.delete('/:user_id', usersController.deleteUserById)
+router.delete('/:user_id', auth.checkJwt, usersController.deleteUserById)
 
 module.exports = router

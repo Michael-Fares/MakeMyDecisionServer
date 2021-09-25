@@ -31,7 +31,12 @@ const getDecisionById = (req, res) => {
   GROUP BY Decisions.decision_id;`
   sql = mysql.format(sql, [req.params.decision_id])
   pool.query(sql, (err, rows) => {
-    if (err) return handleSQLError(res, err)
+    if (err) { 
+      return handleSQLError(res, err) 
+    }
+    if(!rows.length) {
+      return res.status(404).send('No decision found with that id')
+    }
     return res.json(rows);
   })
 }
@@ -50,6 +55,9 @@ const listDecisionsByUserId = (req, res) => {
   sql = mysql.format(sql, [req.params.user_id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
+    if (!rows.length) {
+      res.status(404).send("no user with that id exists")
+    }
     return res.json(rows);
   })
 }
@@ -68,7 +76,7 @@ const createDecisionByUserId = (req, res) => {
       return handleSQLError(res, err)
     }
 
-// is the following if statement even needed??
+// is the following if statement even needed and if so how exactly is it supposed to work??
     // if (rows.user_id !== req.id) {
     //   res.status(400).send('Please log in')
     // }

@@ -40,7 +40,7 @@ const getUserById = (req, res) => {
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)
     if(results.length === 0) {
-      res.status(404)
+      res.status(404).send('No user found with that id')
     }
     return res.json(results);
   })
@@ -130,11 +130,13 @@ const deleteUserById = (req, res) => {
   let sql = 'DELETE FROM ?? WHERE ?? = ?'
   // WHAT GOES IN THE BRACKETS
   sql = mysql.format(sql, ['Users', 'Users.user_id', req.params.user_id])
-
-  pool.query(sql, (err, results) => {
-    if (err) return handleSQLError(res, err)
-    return res.json({ message: `Deleted ${results.affectedresults} user(s) with id ${req.params.user_id}` });
-  })
+  
+   if(req.id == req.params.user_id) {
+   pool.query(sql, (err, results) => {
+     if (err) return handleSQLError(res, err)
+     return res.json({ message: `Deleted ${results.affectedresults} user(s) with id ${req.params.user_id}` });
+   })
+  }
 }
 
 module.exports = {
