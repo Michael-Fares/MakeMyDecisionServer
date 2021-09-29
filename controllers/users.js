@@ -74,6 +74,7 @@ const loginUser = (req, res) => {
   sql = mysql.format(sql, [ email ])
   
   pool.query(sql, (err, results) => {
+    let goodPassword
     if (err) { 
       return handleSQLError(res, err)
     }
