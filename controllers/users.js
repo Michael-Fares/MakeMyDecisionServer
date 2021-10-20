@@ -47,7 +47,7 @@ const getUserById = (req, res) => {
 }
 
 //create a user - Signup user. 
-  const createUser = (req, res) => {
+  const createUser = (req, res, next) => {
   const { first_name, last_name, email, password, confirmPassword } = req.body
   
   if(password !== confirmPassword){
@@ -62,7 +62,7 @@ const getUserById = (req, res) => {
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err)
-    return res.send(`New user created with id ${results.insertId}`);
+    res.send(`New user created with id ${results.insertId}`);
   })
   // calling next broke it, otherwise it works to insert a hashed password. So figure out how to fix it after.
 }
@@ -102,8 +102,8 @@ const loginUser = (req, res) => {
         id: id
       }
       const accessToken = jwt.sign(unsignedToken, jwtSecret) //string
-      res.json( { accessToken, email, id} );
-    } else{
+      return res.json( { accessToken, email, id} );
+    } else {
       return res.status(401).send("Email and/or Password are incorrect")
     }
 
