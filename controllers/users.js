@@ -133,11 +133,13 @@ const deleteUserById = (req, res) => {
   sql = mysql.format(sql, ['Users', 'Users.user_id', req.params.user_id])
   
    if(req.id == req.params.user_id) {
+      console.log("The delete query will be inside of this if block")
+   }
+
    pool.query(sql, (err, results) => {
-     if (err) return handleSQLError(res, err)
-     return res.json({ message: `Deleted ${results.affectedresults} user(s) with id ${req.params.user_id}` });
-   })
-  }
+    if (err) return handleSQLError(res, err)
+    return res.json({ message: `Deleted ${results.affectedresults} user(s) with id ${req.params.user_id}` });
+  })
 }
 
 module.exports = {

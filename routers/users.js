@@ -18,6 +18,6 @@ router.post('/login', usersController.loginUser)
 
 router.put('/:user_id', usersController.updateUserById)
 
-router.delete('/:user_id', auth.checkJwt, usersController.deleteUserById)
+router.delete('/:user_id', usersController.deleteUserById)
 
 module.exports = router
