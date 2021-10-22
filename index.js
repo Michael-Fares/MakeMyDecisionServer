@@ -3,6 +3,7 @@ require('dotenv').config()
 //
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors")
 
 const usersRouter = require('./routers/users.js');
 const decisionsRouter = require('./routers/decisions.js');
@@ -12,7 +13,7 @@ const rankingsRouter = require('./routers/rankings.js');
 
 const app = express();
 
-
+app.use(cors())
 app.use(bodyParser.json())
 app.use(express.json())
 
