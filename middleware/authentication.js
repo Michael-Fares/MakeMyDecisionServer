@@ -5,12 +5,16 @@ const jwtSecret = "secret123";
 const checkJwt = (req, res, next) => {
   console.log("processing JWT authentication check");
 
+  console.log('req.headers', req.headers)
+
   let token;
   if(req.headers.authorization){
     let bearer = req.headers.authorization.split(" ");
     token = bearer[1]
+    console.log('token', token)
   } else {
     token = null;
+    console.log('token', token)
   }
   if(!token){
     res.status(401).send("Unauthorized!!!");

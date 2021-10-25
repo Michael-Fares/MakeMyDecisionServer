@@ -70,7 +70,7 @@ const getUserById = (req, res) => {
 // login user
 const loginUser = (req, res) => {
   const { email, password } = req.body
-  let sql = "SELECT user_id, email, login_pwd FROM Users WHERE email = ?;"
+  let sql = "SELECT user_id, first_name, email, login_pwd FROM Users WHERE email = ?;"
   sql = mysql.format(sql, [ email ])
   
   pool.query(sql, (err, results) => {
@@ -97,14 +97,17 @@ const loginUser = (req, res) => {
     if(goodPassword){
       // set the jwt id equal to the user_id that has been found in the database
       const id = results[0].user_id
+      const first_name = results[0].first_name
       const unsignedToken = {
+        first_name: first_name,
         email: email,
         id: id
       }
       const accessToken = jwt.sign(unsignedToken, jwtSecret) //string
-      return res.json( { accessToken, email, id} );
+      res.cookie('our_token', accessToken, {httpOnly: true, sameSite: false})
+      return res.json( { accessToken, first_name, email, id} );
     } else {
-      return res.status(401).send("Email and/or Password are incorrect")
+      res.status(401).send("Email and/or Password are incorrect")
     }
 
   })
