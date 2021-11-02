@@ -31,5 +31,5 @@ app.get('/', (req, res) => {
 const port = process.env.PORT || 4001;
 
 app.listen(port, () => {
- console.log(`Web server is listening on port ${port}!`);
+ console.log(`Welcome to Make My Decision API!`);
 });
