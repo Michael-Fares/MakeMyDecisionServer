@@ -25,7 +25,7 @@ app.use('/options', optionsRouter)
 app.use('/rankings', rankingsRouter)
 
 app.get('/', (req, res) => {
-  res.send('Welcome to Make My Decision Server!')
+  res.send('Welcome to Make My Decision API!')
 })
 
 const port = process.env.PORT || 4001;
